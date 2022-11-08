@@ -2,7 +2,9 @@ const Tareas = require("./models/tareas")
 const { 
     inquirerMenu,
     pausa,
-    leerInput 
+    leerInput,
+    listadoTareasBorrar,
+    confirmar,
 } = require("./helpers/inquirer")
 const { guardarDB, leerDB } = require("./helpers/guardarArchivo")
 
@@ -26,7 +28,23 @@ const main = async () => {
                 tareas.crearTarea(desc)
                 break;
             case '2':
-                tareas.listadoCompleto()
+                tareas.listado()
+                break;
+            case '3':
+                tareas.listadoCompletadas(true)
+                break;
+            case '4':
+                tareas.listadoCompletadas(false)
+                break;
+            case '6':
+                const id = await listadoTareasBorrar(tareas.listadoArr)
+                if(id !== '0'){
+                    const ok = await confirmar('Está seguro?')
+                    if(ok){
+                        tareas.borrarTarea(id)
+                        console.log('Tarea borrada')
+                    }
+                }
                 break;
         }
 
